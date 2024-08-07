@@ -38,7 +38,7 @@ export default function Login() {
             <div className="flex-grow flex items-center justify-center">
                 <form 
                     onSubmit={handleSubmit} 
-                    className="bg-white p-8 rounded-lg shadow-md w-96 z-10 mt-56"
+                    className="bg-white p-8 rounded-lg shadow-md w-96 z-10 mt-48"
                 >
                     <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
                     <div className="mb-4">
