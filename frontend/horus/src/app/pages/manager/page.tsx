@@ -1,10 +1,11 @@
-import Header from '@/app/components/header/home';
+import { BalonOptionManager } from '@/app/components/manager/balons/balonManager';
+import Header from '@/app/components/header/header';
 import React from 'react';
 
-export default function AdminPage() {
+export default function ManagerPage() {
     return <>
         <Header />
-        <h1>Manager Page</h1>
+        <BalonOptionManager />
     </>
             
     

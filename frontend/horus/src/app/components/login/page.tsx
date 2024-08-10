@@ -64,7 +64,7 @@ export default function Login() {
         <main className="min-h-screen flex items-start justify-center bg-gray-300">
             <form 
                 onSubmit={handleSubmit} 
-                className="bg-white p-8 rounded-lg shadow-md w-96 z-10 mt-44"
+                className="bg-white p-8 rounded-lg shadow-md w-96 z-10 mt-40"
             >
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
                 <div className="mb-4">
