@@ -1,3 +1,5 @@
+'use client'
+
 export function SearchProduct() {
   return (
     <div className="mt-10 p-4 border rounded shadow-lg bg-white">

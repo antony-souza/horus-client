@@ -1,3 +1,5 @@
+'use client'
+
 export default function Header() {
   return (
     <div className="w-full fixed top-0 left-0 z-50 shadow-md">
