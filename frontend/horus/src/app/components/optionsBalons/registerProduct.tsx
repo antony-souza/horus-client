@@ -55,9 +55,9 @@ export function RegisterProduct() {
     return (
         <div className="relative">
             <form className="mt-10 p-4 border rounded shadow-lg bg-white" onSubmit={Submit}>
-                <div className="flex gap-2 justify-center">
+                <div className="flex gap-2 justify-center items-cente mb-5">
                     <span className="material-symbols-outlined">add</span>
-                    <h2 className="text-xl font-bold mb-4">Registrar Produto</h2>
+                    <h2 className="text-xl font-bold">Registrar Produto</h2>
                 </div>
                 <label htmlFor="product-name">Nome do Produto:</label>
                 <input
@@ -67,6 +67,7 @@ export function RegisterProduct() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="p-2 border rounded w-full mb-4"
+                    required
                 />
                 <label htmlFor="product-quantity">Quantidade:</label>
                 <input
@@ -75,7 +76,8 @@ export function RegisterProduct() {
                     placeholder="Quantidade"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
-                    className="p-2 border rounded w-full mb-4"
+                    className="p-2 border rounded w-full mb-4" 
+                    required
                 />
                 <label htmlFor="product-packaging">Tipo(Pacote/Fardo):</label>
                 <select
@@ -83,6 +85,7 @@ export function RegisterProduct() {
                     value={packaging}
                     onChange={(e) => setPackaging(e.target.value)}
                     className="p-2 border rounded w-full mb-4"
+                    required
                 >
                     <option value="" disabled>Selecione uma opção</option>
                     <option value="pacote">Pacote</option>
@@ -96,10 +99,11 @@ export function RegisterProduct() {
                     value={expirationDate}
                     onChange={(e) => setExpirationDate(e.target.value)}
                     className="p-2 border rounded w-full mb-4"
+                    required
                 />
                 <button
                     type="submit"
-                    className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition-colors duration-200"
+                    className="w-30 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition-colors duration-200"
                 >
                     Registrar
                 </button>
