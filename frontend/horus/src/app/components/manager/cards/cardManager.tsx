@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react';
-import { SearchProduct } from '../../optionsBalons/searchProduct';
-import { RegisterProduct } from '../../optionsBalons/registerProduct';
+import { SearchProduct } from '../../service/searchProduct';
+import { RegisterProduct } from '../../service/registerProduct';
 
 type CardOptions = 'search' | 'registerProduct' | 'edit' | 'reports' | 'charts' | 'manageEmployees';
 

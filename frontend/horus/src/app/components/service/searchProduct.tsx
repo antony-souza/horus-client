@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+
 export function SearchProduct() {
   const [products, setProducts] = useState<any[]>([]);
   const [searchParams, setSearchParams] = useState({
@@ -24,7 +25,16 @@ export function SearchProduct() {
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-  
+    //Converte(object.values()) o valor do input em array com todas as informações e verifica todos(every()) os valores se
+    //estão vazios
+    const SearchEmpty = Object.values(searchParams).every((value) => !value.trim());
+    
+    if (SearchEmpty) {
+      setFailMessage('Por favor, preencha pelo menos um campo de busca.');
+      setTimeout(() => setFailMessage(''), 10000);
+      return; // Vai parar a requisição se não passar nada nos inputs
+    }
+
     const queryString = Object.entries(searchParams)//Converte o input em um array de pares de key=value
       .filter(([_, value]) => value) // Filtra inputs vazios
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`) //Mapeia o key,value do input preenchido e converte em key=value
@@ -51,12 +61,20 @@ export function SearchProduct() {
       console.log('Success:', data);
 
       setProducts(data.products);
-      setSuccessMessage('Produtos encontrados!');
+
+      setFailMessage(
+        data.products.length === 0 ||data.products.length === ''
+          ?data.message|| 'Nenhum Produto Encontrado!'
+          :setSuccessMessage('Produtos Encontrados!')
+      )
+
+      setTimeout(() => setFailMessage(''), 10000);
       setTimeout(() => setSuccessMessage(''), 10000);
+
 
     } catch (error) {
       console.error('Error:', error);
-      setFailMessage('Falha na consulta!');
+      setFailMessage('Provavelmente precisa fazer login novamente!');
       setTimeout(() => setFailMessage(''), 10000);
     }
   };
@@ -68,6 +86,7 @@ export function SearchProduct() {
         <h2 className="text-xl font-bold">Buscar Produto</h2>
       </div>
 
+      <label>Nome:</label>
       <input
         type="text"
         name="name"
@@ -76,7 +95,8 @@ export function SearchProduct() {
         onChange={handleInputChange}
         className="p-2 border rounded w-full mb-4"
       />
-
+      
+      <label>Validade:</label>
       <input
         type="date"
         name="expirationDate"
@@ -86,6 +106,7 @@ export function SearchProduct() {
         className="p-2 border rounded w-full mb-4"
       />
 
+      <label>Funcionário:</label>
       <input
         type="text"
         name="user"
@@ -94,7 +115,7 @@ export function SearchProduct() {
         onChange={handleInputChange}
         className="p-2 border rounded w-full mb-4"
       />
-
+      <label>Empresa:</label>
       <input
         type="text"
         name="company"
@@ -124,34 +145,35 @@ export function SearchProduct() {
 
       {/* Mostra a tabela de produtos */}
       {products.length > 0 && (
-        <div className="mt-4 p-4 border rounded bg-gray-100 overflow-x-auto">
-          <h3 className="text-lg font-bold mb-4">Produtos Encontrados:</h3>
-          <table className="border-collapse">
-            <thead>
-              <tr>
-                <th className="border-b-2 p-2 text-left">Nome</th>
-                <th className="border-b-2 p-2 text-left">Quantidade</th>
-                <th className="border-b-2 p-2 text-left">Embalagem</th>
-                <th className="border-b-2 p-2 text-left">Validade</th>
-                <th className="border-b-2 p-2 text-left">Funcionário</th>
-                <th className="border-b-2 p-2 text-left">Empresa</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product, index) => (
-                <tr key={index}>
-                  <td className="border-b p-2">{product.name}</td>
-                  <td className="border-b p-2">{product.quantity}</td>
-                  <td className="border-b p-2">{product.packaging}</td>
-                  <td className="border-b p-2">{new Date(product.expirationDate).toLocaleDateString()}</td>
-                  <td className="border-b p-2">{product.user}</td>
-                  <td className="border-b p-2">{product.company}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+  <div className="mt-4 p-4 border rounded bg-gray-100 overflow-x-auto">
+    <h3 className="text-lg font-bold mb-4">Produtos Encontrados:</h3>
+    <table className="min-w-full divide-y divide-gray-200">
+      <thead>
+        <tr>
+          <th className="p-2 text-left">Nome</th>
+          <th className="p-2 text-left">Quantidade</th>
+          <th className="p-2 text-left">Embalagem</th>
+          <th className="p-2 text-left">Validade</th>
+          <th className="p-2 text-left">Funcionário</th>
+          <th className="p-2 text-left">Empresa</th>
+        </tr>
+      </thead>
+      <tbody className="bg-white divide-y divide-gray-200">
+        {products.map((product, index) => (
+          <tr key={index}>
+            <td className="p-2">{product.name}</td>
+            <td className="p-2">{product.quantity}</td>
+            <td className="p-2">{product.packaging}</td>
+            <td className="p-2">{new Date(product.expirationDate).toLocaleDateString()}</td>
+            <td className="p-2">{product.user}</td>
+            <td className="p-2">{product.company}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+
     </form>
   );
 }
