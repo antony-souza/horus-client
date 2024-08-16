@@ -3,74 +3,114 @@
 import { useState } from 'react';
 
 export function SearchProduct() {
-  const [name, setName] = useState('');
-  const [products, setProducts] = useState<any[]>([]); 
+  const [products, setProducts] = useState<any[]>([]);
+  const [searchParams, setSearchParams] = useState({
+    name: '',
+    expirationDate: '',
+    user: '',
+    company: '',
+  });
+
   const [successMessage, setSuccessMessage] = useState('');
   const [failMessage, setFailMessage] = useState('');
 
-  const Submit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams({
+      ...searchParams,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
   
+    const queryString = Object.entries(searchParams)//Converte o input em um array de pares de key=value
+      .filter(([_, value]) => value) // Filtra inputs vazios
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`) //Mapeia o key,value do input preenchido e converte em key=value
+      //encodeURIComponent garante que os valores sejam passados corretamente para a url
+      .join('&');//Faz a separação de filtros com o caractere
+
     const token = localStorage.getItem('token');
-  
+
     try {
-      const response = await fetch(`http://localhost:3003/product/search?name=${encodeURIComponent(name)}`, {
+      const response = await fetch(`http://localhost:3003/product/search?${queryString}`, {
         method: 'GET',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
         },
       });
-  
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Erro na resposta da rede');
       }
-  
+
       const data = await response.json();
-  
-      if (!data || !data.products) {
-        throw new Error('Resposta da API inválida');
-      }
-  
-      if (data.products.length === 0) {
-        setSuccessMessage('Nenhum produto encontrado.');
-        setFailMessage('Nenhum produto encontrado!');
-        setTimeout(() => setFailMessage(''), 10000);
-      } else {
-        setProducts(data.products); // Atualiza o estado com o array de produtos
-        setSuccessMessage('Produtos encontrados!');
-      }
-      
+      console.log('Success:', data);
+
+      setProducts(data.products);
+      setSuccessMessage('Produtos encontrados!');
       setTimeout(() => setSuccessMessage(''), 10000);
-  
+
     } catch (error) {
       console.error('Error:', error);
+      setFailMessage('Falha na consulta!');
+      setTimeout(() => setFailMessage(''), 10000);
     }
-  };  
+  };
 
   return (
-    <form className="mt-10 p-6 border max-w-4xl mx-auto rounded-lg shadow-lg bg-white w-full" onSubmit={Submit}>
+    <form className="mt-10 p-4 border mx-auto rounded shadow-lg bg-white" onSubmit={handleSearch}>
       <div className="flex gap-2 items-center mb-5 pb-2 justify-center">
         <span className="material-symbols-outlined">search</span>
-        <h2 className="text-xl font-bold">Consultar Estoque</h2>
+        <h2 className="text-xl font-bold">Buscar Produto</h2>
       </div>
-      <label>Nome do Produto:</label>
+
       <input
-        required
         type="text"
-        placeholder="Digite sua busca..."
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        name="name"
+        placeholder="Nome do Produto"
+        value={searchParams.name}
+        onChange={handleInputChange}
         className="p-2 border rounded w-full mb-4"
       />
+
+      <input
+        type="date"
+        name="expirationDate"
+        placeholder="Data de Validade"
+        value={searchParams.expirationDate}
+        onChange={handleInputChange}
+        className="p-2 border rounded w-full mb-4"
+      />
+
+      <input
+        type="text"
+        name="user"
+        placeholder="Nome do Funcionário"
+        value={searchParams.user}
+        onChange={handleInputChange}
+        className="p-2 border rounded w-full mb-4"
+      />
+
+      <input
+        type="text"
+        name="company"
+        placeholder="Nome da Empresa"
+        value={searchParams.company}
+        onChange={handleInputChange}
+        className="p-2 border rounded w-full mb-4"
+      />
+
       <button
-        className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition-colors duration-200"
+        className="w-30 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition-colors duration-200"
       >
-        Consultar
+        Buscar
       </button>
 
-      {/* Exibe a mensagem de sucesso ou falha */}
+    
       {successMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white py-2 px-4 rounded shadow-lg z-50">
           {successMessage}
@@ -82,11 +122,11 @@ export function SearchProduct() {
         </div>
       )}
 
-      {/* Renderiza a tabela com rolagem horizontal */}
-      {products.length > 0 ? (
-        <div className="mt-6 p-4 border rounded bg-gray-100 overflow-x-auto">
+      {/* Mostra a tabela de produtos */}
+      {products.length > 0 && (
+        <div className="mt-4 p-4 border rounded bg-gray-100 overflow-x-auto">
           <h3 className="text-lg font-bold mb-4">Produtos Encontrados:</h3>
-          <table className="min-w-full border-collapse">
+          <table className="border-collapse">
             <thead>
               <tr>
                 <th className="border-b-2 p-2 text-left">Nome</th>
@@ -95,25 +135,22 @@ export function SearchProduct() {
                 <th className="border-b-2 p-2 text-left">Validade</th>
                 <th className="border-b-2 p-2 text-left">Funcionário</th>
                 <th className="border-b-2 p-2 text-left">Empresa</th>
-                {/* Adicione mais cabeçalhos conforme necessário */}
               </tr>
             </thead>
             <tbody>
               {products.map((product, index) => (
                 <tr key={index}>
-                  <td className="border-b p-2">{product.name || 'N/A'}</td>
-                  <td className="border-b p-2">{product.quantity || 'N/A'}</td>
-                  <td className="border-b p-2">{product.packaging || 'N/A'}</td>
-                  <td className="border-b p-2">{product.expirationDate ? new Date(product.expirationDate).toLocaleDateString() : 'N/A'}</td>
-                  <td className="border-b p-2">{product.user || 'N/A'}</td>
-                  <td className="border-b p-2">{product.company || 'N/A'}</td>
+                  <td className="border-b p-2">{product.name}</td>
+                  <td className="border-b p-2">{product.quantity}</td>
+                  <td className="border-b p-2">{product.packaging}</td>
+                  <td className="border-b p-2">{new Date(product.expirationDate).toLocaleDateString()}</td>
+                  <td className="border-b p-2">{product.user}</td>
+                  <td className="border-b p-2">{product.company}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      ) : (
-        <p className="mt-6 text-center">Nenhum produto encontrado.</p>
       )}
     </form>
   );
