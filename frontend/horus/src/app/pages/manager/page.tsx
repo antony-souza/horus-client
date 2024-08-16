@@ -1,12 +1,12 @@
 'use client'
 
 import HeaderHome from '@/app/components/header/home';
-import { BallonOptionManager } from '@/app/components/manager/balons/balonManager';
+import { CardManager } from '@/app/components/manager/cards/cardManager';
 import React from 'react';
 
-export default function AdminPage() {
+export default function ManagerPage() {
     return <>
         <HeaderHome />
-        <BallonOptionManager />
+        <CardManager />
 </>
 }

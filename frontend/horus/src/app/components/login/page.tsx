@@ -14,6 +14,8 @@ interface DecodedToken {
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [failMessage, setfailMessage] = useState('');
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,7 +42,7 @@ export default function Login() {
 
             localStorage.setItem('token', data.token); 
 
-            // Decodificar o token para extrair as informações necessárias
+            //Decodificar o token para extrair as informações necessárias, tipo id,companyid,role
             const decoded: DecodedToken = jwtDecode(data.token);
 
             console.log('Token decodificado:', decoded);
@@ -56,21 +58,26 @@ export default function Login() {
                     console.error('Role não reconhecida:', decoded.role);
                     break;
             }
-
+            setSuccessMessage('Login feito com sucesso!');
+            setTimeout(() => setSuccessMessage(''), 10000); 
         } catch (error) {
             console.error('Erro ao fazer auth:', error);
+
+            setfailMessage
+            ('Falha ao fazer login. Tente Novamente! Se a falha continuar entre em contato com o suporte!');
+            setTimeout(() => setfailMessage(''), 10000);
         }
     };
 
     return (
-        <main className="min-h-screen flex items-start justify-center bg-gray-300">
+        <main className="min-h-screen flex items-start justify-center">
             <form 
                 onSubmit={handleSubmit} 
-                className="bg-white p-8 rounded-lg shadow-md w-96 z-10 mt-44"
+                className=" bg-slate-600 p-8 rounded-lg shadow-md w-96 z-10 mt-44"
             >
-                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+                <h2 className="text-2xl font-bold mb-6 text-center text-white">Login</h2>
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
+                    <label className="block text-sm font-medium mb-1 text-white" htmlFor="email">
                         Email
                     </label>
                     <input
@@ -84,7 +91,7 @@ export default function Login() {
                     />
                 </div>
                 <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
+                    <label className="block text-sm font-medium text-white mb-1" htmlFor="password">
                         Senha
                     </label>
                     <input
@@ -104,6 +111,19 @@ export default function Login() {
                         Entrar
                     </button>
             </form>
+
+            {successMessage && (
+            <div className="fixed top-4 right-4 bg-green-500 text-white py-2 px-4 rounded shadow-lg z-50">
+                 {successMessage}
+            </div>
+            )}
+
+            {failMessage && (
+            <div className="fixed top-4 right-4 bg-red-500 text-white py-2 px-4 rounded shadow-lg z-50">
+                 {failMessage}
+            </div>
+            )}
+
         </main>
     );
 }

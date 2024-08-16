@@ -1,11 +1,12 @@
-"use client"
-import { BalonOptionAdmin } from '@/app/components/admin/balons/balonAdmin';
+"use client";
+import { CardAdmin } from '@/app/components/admin/cards/cardAdmin';
 import HeaderHome from '@/app/components/header/home';
-import React from 'react';
 
 export default function AdminPage() {
-    return <>
-        <HeaderHome />
-        <BalonOptionAdmin />
-    </>    
+    return (
+        <>
+            <HeaderHome />
+            <CardAdmin />
+        </>
+    );
 }

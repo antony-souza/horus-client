@@ -8,6 +8,7 @@ export function RegisterProduct() {
     const [packaging, setPackaging] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [failMessage, setfailMessage] = useState('');
 
     const Submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -49,16 +50,20 @@ export function RegisterProduct() {
             setTimeout(() => setSuccessMessage(''), 10000); 
         } catch (error) {
             console.error('Error:', error);
+
+            setfailMessage('Produto já existe! Edite o produto na opção "Editar Produto"');
+            setTimeout(() => setfailMessage(''), 10000); 
         }
     };
 
     return (
         <div className="relative">
-            <form className="mt-10 p-4 border rounded shadow-lg bg-white" onSubmit={Submit}>
-                <div className="flex gap-2 justify-center items-cente mb-5">
+            <form className="mt-10 p-6 max-w-lg mx-auto border rounded shadow-lg bg-white" onSubmit={Submit}>
+                <div className="flex gap-2 justify-center items-center mb-5">
                     <span className="material-symbols-outlined">add</span>
                     <h2 className="text-xl font-bold">Registrar Produto</h2>
                 </div>
+
                 <label htmlFor="product-name">Nome do Produto:</label>
                 <input
                     id="product-name"
@@ -79,7 +84,7 @@ export function RegisterProduct() {
                     className="p-2 border rounded w-full mb-4" 
                     required
                 />
-                <label htmlFor="product-packaging">Tipo(Pacote/Fardo):</label>
+                <label htmlFor="product-packaging">Tipo:</label>
                 <select
                     id="product-packaging"
                     value={packaging}
@@ -88,8 +93,10 @@ export function RegisterProduct() {
                     required
                 >
                     <option value="" disabled>Selecione uma opção</option>
-                    <option value="pacote">Pacote</option>
-                    <option value="fardo">Fardo</option>
+                    <option value="PACOTE">PACOTES</option>
+                    <option value="KG">FARDOS</option>
+                    <option value="CAIXAS">CAIXAS</option>
+                    <option value="KG">KG</option>
                 </select>
                 <label htmlFor="product-expiration">Validade:</label>
                 <input
@@ -107,13 +114,21 @@ export function RegisterProduct() {
                 >
                     Registrar
                 </button>
+
             </form>
 
             {successMessage && (
-                <div className="fixed bottom-4 right-4 bg-green-500 text-white py-2 px-4 rounded shadow-lg">
-                    {successMessage}
-                </div>
+            <div className="fixed top-4 right-4 bg-green-500 text-white py-2 px-4 rounded shadow-lg z-50">
+                 {successMessage}
+            </div>
             )}
+
+            {failMessage && (
+            <div className="fixed top-4 right-4 bg-red-500 text-white py-2 px-4 rounded shadow-lg z-50">
+                 {failMessage}
+            </div>
+            )}
+
         </div>
     );
 }
