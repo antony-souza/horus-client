@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react';
-import { SearchProduct } from '../../service/searchProduct';
-import { RegisterProduct } from '../../service/registerProduct';
+import { RegisterProduct } from '../../service/product/registerProduct';
+import { SearchForProductAsManager } from '../../service/product/searchProductManager';
+import { RemoveBatchProducts } from '../../service/product/removeBatchProduct';
 
-type CardOptions = 'search' | 'registerProduct' | 'edit' | 'reports' | 'charts' | 'manageEmployees';
+type CardOptions = 'search' | 'registerProduct' | 'SendBatchProducts' | 'RemoveBatchProducts' | 'charts' | 'manageEmployees';
 
 export function CardManager() {
 
@@ -35,7 +36,7 @@ export function CardManager() {
         </div>
 
         <div
-          onClick={() => CardClick('edit')}
+          onClick={() => CardClick('SendBatchProducts')}
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
           <span className="material-symbols-outlined">local_shipping</span>
@@ -43,11 +44,11 @@ export function CardManager() {
         </div>
 
         <div
-          onClick={() => CardClick('reports')}
+          onClick={() => CardClick('RemoveBatchProducts')}
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
-          <span className="material-symbols-outlined">shield_person</span>
-          <span className="font-bold">Gerar Relatórios</span>
+          <span className="material-symbols-outlined">local_shipping</span>
+          <span className="font-bold">Retirar Mercadoria</span>
         </div>
 
         <div
@@ -55,7 +56,7 @@ export function CardManager() {
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
           <span className="material-symbols-outlined">shield_person</span>
-          <span className="font-bold">Gráficos</span>
+          <span className="font-bold">Relatórios</span>
         </div>
 
         <div
@@ -68,8 +69,9 @@ export function CardManager() {
 
       </div>
       <div className="mt-10">
-        {selectedOption === 'search' && <SearchProduct />}
+        {selectedOption === 'search' && <SearchForProductAsManager />}
         {selectedOption === 'registerProduct' && <RegisterProduct />}
+        {selectedOption === 'RemoveBatchProducts' && <RemoveBatchProducts />}
       </div>
     </div>
   );

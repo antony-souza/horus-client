@@ -1,10 +1,13 @@
 'use client'
 
 import { useState } from 'react';
-import { SearchProduct } from '../../service/searchProduct';
-import { RegisterProduct } from '../../service/registerProduct';
+import { RegisterProduct } from '../../service/product/registerProduct';
+import { SearchForProductAsManager } from '../../service/product/searchProductManager';
+import { SendBatchProducts } from '../../service/product/sendBatchProduct';
+import { RemoveBatchProducts } from '../../service/product/removeBatchProduct';
+import { SearchForProductAsAdmin } from '../../service/product/searchProductAdmin';
 
-type CardOptions = 'search' | 'registerProduct' | 'newValueProduct' | 'reports' | 'charts' | 'manageUsers';
+type CardOptions = 'search' | 'registerProduct' | 'SendBatchProducts' | 'RemoveBatchProducts' | 'charts' | 'manageEmployees';
 
 export function CardAdmin() {
 
@@ -35,7 +38,7 @@ export function CardAdmin() {
         </div>
 
         <div
-          onClick={() => CardClick('newValueProduct')}
+          onClick={() => CardClick('SendBatchProducts')}
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
           <span className="material-symbols-outlined">local_shipping</span>
@@ -43,11 +46,11 @@ export function CardAdmin() {
         </div>
 
         <div
-          onClick={() => CardClick('reports')}
+          onClick={() => CardClick('RemoveBatchProducts')}
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
-          <span className="material-symbols-outlined">shield_person</span>
-          <span className="font-bold">Gerar Relatórios</span>
+          <span className="material-symbols-outlined">local_shipping</span>
+          <span className="font-bold">Retirar Mercadoria</span>
         </div>
 
         <div
@@ -55,22 +58,23 @@ export function CardAdmin() {
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
           <span className="material-symbols-outlined">shield_person</span>
-          <span className="font-bold">Gráficos</span>
+          <span className="font-bold">Relatórios</span>
         </div>
 
         <div
-          onClick={() => CardClick('manageUsers')}
+          onClick={() => CardClick('manageEmployees')}
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
           <span className="material-symbols-outlined">shield_person</span>
           <span className="font-bold">Gerenciar Empresas</span>
         </div>
-        
+
       </div>
       <div className="mt-10">
-        {selectedOption === 'search' && <SearchProduct />}
+        {selectedOption === 'search' && <SearchForProductAsAdmin />}
         {selectedOption === 'registerProduct' && <RegisterProduct />}
-        {selectedOption === 'newValueProduct' && <RegisterProduct />}
+        {selectedOption === 'SendBatchProducts' && <SendBatchProducts />}
+        {selectedOption === 'RemoveBatchProducts' && <RemoveBatchProducts />}
       </div>
     </div>
   );

@@ -39,7 +39,7 @@ export default function Login() {
             if (!response.ok) {
                 throw new Error('Falha na auth!');
             }
-
+            
             localStorage.setItem('token', data.token); 
 
             //Decodificar o token para extrair as informações necessárias, tipo id,companyid,role
