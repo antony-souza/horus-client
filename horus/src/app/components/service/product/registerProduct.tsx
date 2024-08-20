@@ -13,12 +13,12 @@ export function RegisterProduct() {
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+    
         const body = {
             name: name,
             quantity: Number(quantity),
             packaging: packaging,
-            expirationDate: expirationDate + "T00:00:00.000Z"
+            expirationDate: expirationDate ? new Date(expirationDate).toISOString() : undefined
         };
 
         const token = localStorage.getItem('token');
@@ -101,9 +101,9 @@ export function RegisterProduct() {
                     required
                 >
                     <option value="" disabled>Selecione uma opção</option>
-                    <option value="PACOTE">PACOTES</option>
-                    <option value="KG">FARDOS</option>
-                    <option value="CAIXAS">CAIXAS</option>
+                    <option value="UNIDADES">UNIDADES</option>
+                    {/* <option value="KG">FARDOS</option> */}
+                    {/* <option value="CAIXAS">CAIXAS</option> */}
                     <option value="KG">KG</option>
                 </select>
                 <label htmlFor="product-expiration">Validade:</label>

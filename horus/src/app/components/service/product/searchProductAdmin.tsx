@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import moment from 'moment';
 
 export function SearchForProductAsAdmin() {
   const [products, setProducts] = useState<any[]>([]);
   const [searchParams, setSearchParams] = useState({
+    code: '',
     name: '',
     expirationDate: '',
     user: '',
@@ -57,10 +59,12 @@ export function SearchForProductAsAdmin() {
       setProducts(data.products);
 
       setFailMessage(
-        data.products.length === 0 || data.products.length === ''
+        data.products.length === 0
           ? data.message || 'Nenhum Produto Encontrado!'
-          : setSuccessMessage('Produtos Encontrados!')
+          : ''
       );
+
+      setSuccessMessage(data.products.length > 0 ? 'Produtos Encontrados!' : '');
 
       setTimeout(() => setFailMessage(''), 10000);
       setTimeout(() => setSuccessMessage(''), 10000);
@@ -71,12 +75,22 @@ export function SearchForProductAsAdmin() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <form className="mt-10 p-6 border rounded shadow-lg bg-white" onSubmit={handleSearch}>
+    <div className=" max-w-5xl mx-auto p-6">
+      <form className="mt-5 p-6 border rounded shadow-lg bg-white" onSubmit={handleSearch}>
         <div className="flex gap-2 items-center mb-5 pb-2 justify-center">
           <span className="material-symbols-outlined">search</span>
           <h2 className="text-xl font-bold">Buscar Produto</h2>
         </div>
+
+        <label>Número do Produto:</label>
+        <input
+          type="number"
+          name="code"
+          placeholder="Número do Produto"
+          value={searchParams.code}
+          onChange={handleInputChange}
+          className="p-2 border rounded w-full mb-4"
+        />
 
         <label>Nome:</label>
         <input
@@ -140,23 +154,27 @@ export function SearchForProductAsAdmin() {
           <table className="w-full text-lg divide-y divide-gray-200">
             <thead>
               <tr>
-                <th className="p-4 text-left">Nome</th>
-                <th className="p-4 text-left">Quantidade</th>
-                <th className="p-4 text-left">Embalagem</th>
-                <th className="p-4 text-left">Validade</th>
-                <th className="p-4 text-left">Funcionário</th>
-                <th className="p-4 text-left">Empresa</th>
+                <th className="p-4 text-left whitespace-nowrap">Número</th>
+                <th className="p-4 text-left whitespace-nowrap">Nome</th>
+                <th className="p-4 text-left whitespace-nowrap">Quantidade</th>
+                <th className="p-4 text-left whitespace-nowrap">Embalagem</th>
+                <th className="p-4 text-left whitespace-nowrap">Validade</th>
+                <th className="p-4 text-left whitespace-nowrap">Atualização</th>
+                <th className="p-4 text-left whitespace-nowrap">Funcionário</th>
+                <th className="p-4 text-left whitespace-nowrap">Empresa</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {products.map((product, index) => (
                 <tr key={index}>
-                  <td className="p-4">{product.name}</td>
-                  <td className="p-4">{product.quantity}</td>
-                  <td className="p-4">{product.packaging}</td>
-                  <td className="p-4">{new Date(product.expirationDate).toLocaleDateString()}</td>
-                  <td className="p-4">{product.user}</td>
-                  <td className="p-4">{product.company}</td>
+                  <td className="p-4 whitespace-nowrap">{product.code}</td>
+                  <td className="p-4 whitespace-nowrap">{product.name}</td>
+                  <td className="p-4 whitespace-nowrap">{product.quantity}</td>
+                  <td className="p-4 whitespace-nowrap">{product.packaging}</td>
+                  <td className="p-4 whitespace-nowrap">{moment.utc(product.expirationDate).format('DD-MM-YYYY')}</td>
+                  <td className="p-4 whitespace-nowrap">{moment.utc(product.updatedAt).format('DD-MM-YYYY')}</td>
+                  <td className="p-4 whitespace-nowrap">{product.user}</td>
+                  <td className="p-4 whitespace-nowrap">{product.company}</td>
                 </tr>
               ))}
             </tbody>

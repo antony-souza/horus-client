@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { RegisterProduct } from '../../service/product/registerProduct';
 import { SearchForProductAsManager } from '../../service/product/searchProductManager';
 import { RemoveBatchProducts } from '../../service/product/removeBatchProduct';
+import { SendBatchProducts } from '../../service/product/sendBatchProduct';
 
-type CardOptions = 'search' | 'registerProduct' | 'SendBatchProducts' | 'RemoveBatchProducts' | 'charts' | 'manageEmployees';
+type CardOptions = 'Search' | 'RegisterProduct' | 'SendBatchProducts' | 'RemoveBatchProducts' | 'charts' | 'manageEmployees';
 
 export function CardManager() {
 
@@ -20,7 +21,7 @@ export function CardManager() {
       <div className="flex flex-wrap justify-center gap-4">
 
         <div
-          onClick={() => CardClick('search')}
+          onClick={() => CardClick('Search')}
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
           <span className="material-symbols-outlined">search</span>
@@ -28,7 +29,7 @@ export function CardManager() {
         </div>
 
         <div
-          onClick={() => CardClick('registerProduct')}
+          onClick={() => CardClick('RegisterProduct')}
           className="w-72 h-40 bg-cyan-500 rounded flex items-center justify-center shadow-lg text-white space-x-2 cursor-pointer"
         >
           <span className="material-symbols-outlined">add</span>
@@ -69,8 +70,9 @@ export function CardManager() {
 
       </div>
       <div className="mt-10">
-        {selectedOption === 'search' && <SearchForProductAsManager />}
-        {selectedOption === 'registerProduct' && <RegisterProduct />}
+        {selectedOption === 'Search' && <SearchForProductAsManager />}
+        {selectedOption === 'RegisterProduct' && <RegisterProduct />}
+        {selectedOption === 'SendBatchProducts' && <SendBatchProducts />}
         {selectedOption === 'RemoveBatchProducts' && <RemoveBatchProducts />}
       </div>
     </div>

@@ -3,21 +3,22 @@
 import { useState } from "react";
 
 export function SendBatchProducts() {
-    const [name, setName] = useState('');
+    const [code, setCode] = useState('');
     const [quantity, setQuantity] = useState('');
     const [packaging, setPackaging] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [failMessage, setFailMessage] = useState('');
 
+
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const body = {
-            name: name,
+            code: code,
             quantity: Number(quantity),
             packaging: packaging,
-            expirationDate: expirationDate + "T00:00:00.000Z"
+            expirationDate: expirationDate ? new Date(expirationDate).toISOString() : undefined
         };
 
         const token = localStorage.getItem('token');
@@ -38,7 +39,7 @@ export function SendBatchProducts() {
             if (response.ok) {
                 setSuccessMessage(data.message || 'Lote enviado com sucesso!');
                 setFailMessage('');
-                setName('');
+                setCode('');
                 setQuantity('');
                 setPackaging('');
                 setExpirationDate('');
@@ -70,13 +71,13 @@ export function SendBatchProducts() {
                         <h2 className="text-xl font-bold">Enviar Lote</h2>
                     </div>
 
-                    <label htmlFor="product-name">Nome do Produto:</label>
+                    <label htmlFor="product-name">Número do Produto:</label>
                     <input
-                        id="product-name"
-                        type="text"
-                        placeholder="Nome do produto"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        id="product-code"
+                        type="number"
+                        placeholder="Número do Produto"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
                         className="p-2 border rounded w-full mb-4"
                         required
                     />
@@ -99,9 +100,9 @@ export function SendBatchProducts() {
                         required
                     >
                         <option value="" disabled>Selecione uma opção</option>
-                        <option value="PACOTE">PACOTES</option>
-                        <option value="KG">FARDOS</option>
-                        <option value="CAIXAS">CAIXAS</option>
+                        <option value="PACOTE">UNIDADES</option>
+                        {/* <option value="FARDO">FARDOS</option> */}
+                        {/* <option value="CAIXA">CAIXAS</option> */}
                         <option value="KG">KG</option>
                     </select>
                     <label htmlFor="product-expiration">Validade:</label>
@@ -113,11 +114,12 @@ export function SendBatchProducts() {
                         onChange={(e) => setExpirationDate(e.target.value)}
                         className="p-2 border rounded w-full mb-4"
                     />
+
                     <button
                         type="submit"
                         className="w-30 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition-colors duration-200"
                     >
-                        Registrar
+                        Enviar
                     </button>
                 </form>
 

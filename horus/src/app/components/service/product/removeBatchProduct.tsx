@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export function RemoveBatchProducts() {
-    const [name, setName] = useState('');
+    const [code, setCode] = useState('');
     const [quantity, setQuantity] = useState('');
     const [packaging, setPackaging] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -13,7 +13,7 @@ export function RemoveBatchProducts() {
         e.preventDefault();
 
         const body = {
-            name: name,
+            code: code,
             quantity: Number(quantity),
             packaging: packaging,
         };
@@ -36,7 +36,7 @@ export function RemoveBatchProducts() {
             if (response.ok) {
                 setSuccessMessage(data.message || 'Lote!');
                 setFailMessage('');
-                setName('');
+                setCode('');
                 setQuantity('');
                 setPackaging('');
             } else {
@@ -67,13 +67,13 @@ export function RemoveBatchProducts() {
                         <h2 className="text-xl font-bold">Retirar Mercadoria</h2>
                     </div>
 
-                    <label htmlFor="product-name">Nome do Produto:</label>
+                    <label htmlFor="product-code">Número do Produto:</label>
                     <input
-                        id="product-name"
-                        type="text"
-                        placeholder="Nome do produto"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        id="product-code"
+                        type="number"
+                        placeholder="Número do roduto"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
                         className="p-2 border rounded w-full mb-4"
                         required
                     />
@@ -96,9 +96,9 @@ export function RemoveBatchProducts() {
                         required
                     >
                         <option value="" disabled>Selecione uma opção</option>
-                        <option value="PACOTE">PACOTES</option>
-                        <option value="KG">FARDOS</option>
-                        <option value="CAIXAS">CAIXAS</option>
+                        <option value="PACOTE">UNIDADES</option>
+                        {/* <option value="KG">FARDOS</option> */}
+                        {/* <option value="CAIXAS">CAIXAS</option> */}
                         <option value="KG">KG</option>
                     </select>
                     <button
